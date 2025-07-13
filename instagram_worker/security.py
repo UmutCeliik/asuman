@@ -10,7 +10,9 @@ from config import ORCHESTRATOR_SECRET_TOKEN
 API_KEY_HEADER = APIKeyHeader(name="X-Orchestrator-Token")
 
 def verify_token(token: str = Security(API_KEY_HEADER)):
-    """Gelen token'ın geçerli olup olmadığını kontrol eder."""
+    """
+    Orkestra Şefi'nden gelen isteğin başlığındaki (header) token'ı doğrular.
+    """
     if not ORCHESTRATOR_SECRET_TOKEN:
         logging.critical("ORCHESTRATOR_SECRET_TOKEN sırrı ayarlanmamış!")
         raise HTTPException(
@@ -18,7 +20,7 @@ def verify_token(token: str = Security(API_KEY_HEADER)):
             detail="Uygulama güvenlik sırrı yapılandırılmamış."
         )
     
-    # Güvenli karşılaştırma
+    # Zamanlama saldırılarına karşı güvenli karşılaştırma
     if not hmac.compare_digest(token, ORCHESTRATOR_SECRET_TOKEN):
         logging.warning(f"Geçersiz token ile istek denemesi: {token}")
         raise HTTPException(

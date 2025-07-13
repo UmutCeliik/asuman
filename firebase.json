@@ -19,20 +19,6 @@
       "runtime": "python313"
     }
   ],
-  "hosting": {
-    "public": "public/build",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  },
   "emulators": {
     "apphosting": {
       "port": 5002,

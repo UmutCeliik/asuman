@@ -7,17 +7,14 @@ import logging
 # Sadece bir kez çalışması için basit bir kontrol
 _secrets = {}
 
-def get_secret(secret_id: str, version_id: "latest") -> str:
+def get_secret(secret_id: str, version_id="latest") -> str:
     """Google Secret Manager'dan bir sır değerini çeker ve cache'ler."""
     if secret_id in _secrets:
         return _secrets[secret_id]
 
     project_id = os.getenv("GCP_PROJECT")
     if not project_id:
-        # Yerel geliştirme ortamı için proje ID'sini manuel ayarlayabilirsiniz.
-        # Örneğin: project_id = "asuman-integral"
-        # Ancak Cloud Run'da bu değişkene gerek kalmaz.
-        logging.warning("GCP_PROJECT ortam değişkeni bulunamadı.")
+        logging.warning(f"GCP_PROJECT ortam değişkeni bulunamadı. Sır '{secret_id}' için .env dosyası deneniyor.")
         return os.getenv(secret_id.upper())
 
     try:
@@ -40,3 +37,4 @@ GMAIL_APP_PASSWORD = get_secret("GMAIL_APP_PASSWORD")
 GMAIL_IMAP_SERVER = get_secret("GMAIL_IMAP_SERVER")
 PROXY_URL = get_secret("PROXY_URL")
 ORCHESTRATOR_SECRET_TOKEN = get_secret("ORCHESTRATOR_SECRET_TOKEN")
+GCS_BUCKET_NAME = get_secret("GCS_BUCKET_NAME")
